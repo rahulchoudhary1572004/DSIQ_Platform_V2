@@ -4,7 +4,11 @@ import { Card, CardTitle, CardBody } from '@progress/kendo-react-layout';
 import { Link, useLocation } from 'react-router-dom';
 import Footer from '../components/Footer';
 
+<<<<<<< Updated upstream
 // Type Definitions
+=======
+// Type definitions
+>>>>>>> Stashed changes
 interface Service {
   title: string;
   description: string;
@@ -16,6 +20,10 @@ interface WelcomePageProps {
 
 const WelcomePage: React.FC<WelcomePageProps> = ({ isLoggedIn }) => {
   const extraContentRef = useRef<HTMLDivElement>(null);
+<<<<<<< Updated upstream
+=======
+  const location = useLocation();
+>>>>>>> Stashed changes
 
   const handleLearnMore = (): void => {
     if (extraContentRef.current) {
@@ -40,11 +48,17 @@ const WelcomePage: React.FC<WelcomePageProps> = ({ isLoggedIn }) => {
 
   const partners: string[] = ["Amazon", "eBay", "Walmart", "Target", "BestBuy"];
 
+<<<<<<< Updated upstream
   const location = useLocation();
 
   useEffect(() => {
     if (location.hash === '#login-panel') {
       const element: HTMLElement | null = document.getElementById('login-panel');
+=======
+  useEffect(() => {
+    if (location.hash === '#login-panel') {
+      const element = document.getElementById('login-panel');
+>>>>>>> Stashed changes
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
       }
@@ -53,6 +67,10 @@ const WelcomePage: React.FC<WelcomePageProps> = ({ isLoggedIn }) => {
 
   return (
     <div className="bg-[#f9fafb] text-gray-800 font-sans tracking-wide">
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center min-h-screen text-center px-4 bg-gradient-to-b from-white to-gray-100 py-10">
         <h1 className="text-5xl md:text-6xl font-extrabold text-blue-900 mb-6 leading-tight">
@@ -71,6 +89,10 @@ const WelcomePage: React.FC<WelcomePageProps> = ({ isLoggedIn }) => {
 
       {/* Scroll Content */}
       <div ref={extraContentRef}>
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         {/* Login Panels */}
         <section id="login-panel" className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x bg-white shadow-lg">
           {/* Agency Login */}
@@ -110,7 +132,11 @@ const WelcomePage: React.FC<WelcomePageProps> = ({ isLoggedIn }) => {
         <section className="bg-white py-16">
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">Our Data Partners</h2>
           <div className="flex flex-wrap justify-center gap-5 px-4">
+<<<<<<< Updated upstream
             {partners.map((partner: string, idx: number) => (
+=======
+            {partners.map((partner, idx) => (
+>>>>>>> Stashed changes
               <div
                 key={idx}
                 className="text-gray-800 text-md md:text-lg px-6 py-2 bg-gray-100 rounded-full shadow hover:shadow-md transition"
@@ -125,7 +151,11 @@ const WelcomePage: React.FC<WelcomePageProps> = ({ isLoggedIn }) => {
         <section className="bg-gray-50 py-20">
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">What We Offer</h2>
           <div className="flex flex-wrap justify-center gap-10 px-6">
+<<<<<<< Updated upstream
             {services.map((service: Service, index: number) => (
+=======
+            {services.map((service, index) => (
+>>>>>>> Stashed changes
               <Card
                 key={index}
                 style={{ width: 300 }}
@@ -139,7 +169,10 @@ const WelcomePage: React.FC<WelcomePageProps> = ({ isLoggedIn }) => {
             ))}
           </div>
         </section>
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         <Footer isLoggedIn={isLoggedIn} />
       </div>
     </div>

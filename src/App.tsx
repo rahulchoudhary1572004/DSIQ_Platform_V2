@@ -1,5 +1,4 @@
-import { useState, useEffect, Component } from "react";
-import type { ReactNode, ErrorInfo } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -12,7 +11,7 @@ import WelcomePage from "./pages/WelcomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/SignupPage";
 import WorkspaceForm from "./pages/WorkspaceCreation";
-import ModifyWorkspace from "./pages/WorkspaceView/ModifyWorkspace";
+import ModifyWorkspace from "./pages/WorkspaceView/ModifyWorkspace.jsx";
 import Home from "./pages/Home";
 import HelpPage from "./pages/HelpPage";
 import Profile from "./components/Profile";
@@ -46,65 +45,55 @@ import DigitalAssets from "./pages/PIM/DAM";
 import Syndication from "./pages/PIM/Syndication";
 import Channels from "./pages/PIM/ChannelPages/Channels";
 import ChannelDetails from "./pages/PIM/ChannelPages/ChannelDetails";
+import type { RootState, AppDispatch } from "./redux/store";
 
 // Placeholder components for unmapped features
-const CategoryAnalysis = () => <div>Category Analysis Page</div>;
-const BrandAnalysis = () => <div>Brand Analysis Page</div>;
-const ItemLevelAnalysis = () => <div>Item Level Analysis Page</div>;
-const SponsoredADTracker = () => <div>Sponsored AD Tracker Page</div>;
-const ShareOfVoice = () => <div>Share of Voice Page</div>;
-const KeywordTracker = () => <div>Keyword Tracker Page</div>;
-const KeywordPlanner = () => <div>Keyword Planner Page</div>;
+const CategoryAnalysis: React.FC = () => <div>Category Analysis Page</div>;
+const BrandAnalysis: React.FC = () => <div>Brand Analysis Page</div>;
+const ItemLevelAnalysis: React.FC = () => <div>Item Level Analysis Page</div>;
+const SponsoredADTracker: React.FC = () => <div>Sponsored AD Tracker Page</div>;
+const ShareOfVoice: React.FC = () => <div>Share of Voice Page</div>;
+const KeywordTracker: React.FC = () => <div>Keyword Tracker Page</div>;
+const KeywordPlanner: React.FC = () => <div>Keyword Planner Page</div>;
 
-const BrandCategoryInsights = () => <div>Brand & Category Insights Page</div>;
-const AskAIChatbot = () => <div>Ask our AI Chatbot Page</div>;
-const PanelData = () => <div>Panel Data Page</div>;
+const BrandCategoryInsights: React.FC = () => <div>Brand & Category Insights Page</div>;
+const AskAIChatbot: React.FC = () => <div>Ask our AI Chatbot Page</div>;
+const PanelData: React.FC = () => <div>Panel Data Page</div>;
 
-const PromotionTracker = () => <div>Promotion Tracker Page</div>;
-const PromotionPlanner = () => <div>Promotion Planner Page</div>;
-const ActivationPartner = () => <div>Activation Partner Page</div>;
-const Keywords = () => <div>Keywords Page</div>;
-const SearchTerms = () => <div>Search Terms Page</div>;
-const Targets = () => <div>Targets Page</div>;
-const AutomationRules = () => <div>Automation Rules Page</div>;
-const Reporting = () => <div>Reporting Page</div>;
-const AppSettings = () => <div>App Settings Page</div>;
+const PromotionTracker: React.FC = () => <div>Promotion Tracker Page</div>;
+const PromotionPlanner: React.FC = () => <div>Promotion Planner Page</div>;
+const ActivationPartner: React.FC = () => <div>Activation Partner Page</div>;
+const Keywords: React.FC = () => <div>Keywords Page</div>;
+const SearchTerms: React.FC = () => <div>Search Terms Page</div>;
+const Targets: React.FC = () => <div>Targets Page</div>;
+const AutomationRules: React.FC = () => <div>Automation Rules Page</div>;
+const Reporting: React.FC = () => <div>Reporting Page</div>;
+const AppSettings: React.FC = () => <div>App Settings Page</div>;
 
-// PIM Components
-// const DigitalAssets = () => <div>Digital Assets Page</div>;
-// const Syndication = () => <div>Syndication Page</div>;
-// const Channels = () => <div>Channels Page</div>;
 // Error Boundary Component
-
-interface RootState {
-  auth: {
-    isLoggedIn: boolean;
-  };
-}
-
 interface ErrorBoundaryProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 interface ErrorBoundaryState {
   hasError: boolean;
 }
 
-class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(): ErrorBoundaryState {
+  static getDerivedStateFromError(_error: Error): ErrorBoundaryState {
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error("ErrorBoundary caught an error", error, errorInfo);
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
+    console.error("Error caught by boundary:", error, errorInfo);
   }
 
-  render(): ReactNode {
+  render(): React.ReactNode {
     if (this.state.hasError) {
       return <h1>Something went wrong.</h1>;
     }
@@ -113,10 +102,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 }
 
 const App: React.FC = () => {
-  const dispatch = useDispatch();
-  const isLoggedIn = useSelector<RootState, boolean>(
-    (state: RootState) => state.auth?.isLoggedIn ?? false
-  );
+  const dispatch = useDispatch<AppDispatch>();
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const [hasWorkspace, setHasWorkspace] = useState<boolean>(false);
 
   useEffect(() => {
@@ -127,7 +114,7 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    void dispatch(initializePermissions());
+    dispatch(initializePermissions());
   }, [dispatch]);
 
   return (

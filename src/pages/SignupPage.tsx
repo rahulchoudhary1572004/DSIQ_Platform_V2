@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
+<<<<<<< Updated upstream
 import type { ChangeEvent, FormEvent, ReactNode } from 'react';
 import { Input } from '@progress/kendo-react-inputs';
+=======
+import { Input } from '@progress/kendo-react-inputs';
+import type { InputChangeEvent } from '@progress/kendo-react-inputs';
+>>>>>>> Stashed changes
 import { ComboBox } from '@progress/kendo-react-dropdowns';
 import type { ComboBoxChangeEvent, ComboBoxFilterChangeEvent } from '@progress/kendo-react-dropdowns';
 import { useNavigate } from 'react-router-dom';
@@ -10,8 +15,14 @@ import { Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
 import showToast from '../../utils/toast';
 import AuthLayout from '../components/AuthLayout';
+<<<<<<< Updated upstream
 
 // Type Definitions
+=======
+import type { AppDispatch } from '../redux/store';
+
+// Type definitions
+>>>>>>> Stashed changes
 interface FormData {
   first_name: string;
   last_name: string;
@@ -33,7 +44,11 @@ interface Country {
   iso3: string;
 }
 
+<<<<<<< Updated upstream
 interface CountryData {
+=======
+interface CountryApiResponse {
+>>>>>>> Stashed changes
   id: string;
   nicename: string;
   iso: string;
@@ -41,6 +56,7 @@ interface CountryData {
   phonecode: string;
 }
 
+<<<<<<< Updated upstream
 interface ApiResponse {
   data: CountryData[];
 }
@@ -60,6 +76,12 @@ const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const backend_url: string = import.meta.env.VITE_BACKEND_URL;
+=======
+const RegisterPage: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const backend_url = import.meta.env.VITE_BACKEND_URL as string;
+>>>>>>> Stashed changes
 
   const [formData, setFormData] = useState<FormData>({
     first_name: '',
@@ -75,7 +97,10 @@ const RegisterPage: React.FC = () => {
 
   const [countries, setCountries] = useState<Country[]>([]);
   const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
+<<<<<<< Updated upstream
   const [searchTerm, setSearchTerm] = useState<string>('');
+=======
+>>>>>>> Stashed changes
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -85,6 +110,7 @@ const RegisterPage: React.FC = () => {
     const fetchCountries = async (): Promise<void> => {
       try {
         setLoading(true);
+<<<<<<< Updated upstream
         const response = await axios.get<ApiResponse>(`${backend_url}/get-country`);
         const countryData: CountryData[] = response.data.data;
 
@@ -99,6 +125,22 @@ const RegisterPage: React.FC = () => {
 
         // Transform country data
         const transformedCountries: Country[] = countryData.map((c: CountryData) => ({
+=======
+        const response = await axios.get<{ data: CountryApiResponse[] }>(`${backend_url}/get-country`);
+        const countryData = response.data.data;
+
+        // Utility function to convert ISO code to Unicode flag emoji
+        function getFlagEmoji(isoCode: string): string {
+          const code = isoCode.toUpperCase();
+          const A = 0x1F1E6;
+          return [...code]
+            .map(char => String.fromCodePoint(A + char.charCodeAt(0) - 65))
+            .join('');
+        }
+
+        // Transform country data
+        const transformedCountries: Country[] = countryData.map(c => ({
+>>>>>>> Stashed changes
           id: c.id,
           name: c.nicename,
           flag: getFlagEmoji(c.iso),
@@ -110,9 +152,15 @@ const RegisterPage: React.FC = () => {
         setCountries(transformedCountries);
         setFilteredCountries(transformedCountries);
 
+<<<<<<< Updated upstream
         const defaultCountry: Country | undefined = transformedCountries.find((c: Country) => c.iso === 'US');
         if (defaultCountry) {
           setFormData((prev: FormData) => ({
+=======
+        const defaultCountry = transformedCountries.find(c => c.iso === 'US');
+        if (defaultCountry) {
+          setFormData(prev => ({
+>>>>>>> Stashed changes
             ...prev,
             country_id: defaultCountry.id,
             phone: defaultCountry.phoneCode + ' ',
@@ -128,6 +176,7 @@ const RegisterPage: React.FC = () => {
     };
 
     fetchCountries();
+<<<<<<< Updated upstream
   }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -138,40 +187,77 @@ const RegisterPage: React.FC = () => {
       setFormData((prev: FormData) => ({ ...prev, [name]: numericValue }));
     } else {
       setFormData((prev: FormData) => ({ ...prev, [name]: value }));
+=======
+  }, [backend_url]);
+
+  const handleChange = (e: InputChangeEvent): void => {
+    const { name, value } = e.target;
+
+    if (name === 'phone') {
+      const numericValue = (value as string).replace(/[^0-9+\s]/g, '');
+      setFormData(prev => ({ ...prev, [name as string]: numericValue }));
+    } else {
+      setFormData(prev => ({ ...prev, [name as string]: value as string }));
+>>>>>>> Stashed changes
     }
   };
 
   const handleCountryChange = (e: ComboBoxChangeEvent): void => {
+<<<<<<< Updated upstream
     const selectedCountry: Country = e.value;
     const country_id: string = selectedCountry && selectedCountry.id ? selectedCountry.id : '';
 
     setFormData((prev: FormData) => ({
+=======
+    const selectedCountry = e.value as Country | null;
+    const country_id = selectedCountry && selectedCountry.id ? selectedCountry.id : '';
+
+    setFormData(prev => ({
+>>>>>>> Stashed changes
       ...prev,
       country_id,
     }));
 
     if (selectedCountry && selectedCountry.phoneCode) {
+<<<<<<< Updated upstream
       const currentNumber: string = formData.phone.replace(/^\+\d+\s*/, '');
       setFormData((prev: FormData) => ({
+=======
+      const currentNumber = formData.phone.replace(/^\+\d+\s*/, '');
+      setFormData(prev => ({
+>>>>>>> Stashed changes
         ...prev,
         phone: `${selectedCountry.phoneCode} ${currentNumber}`.trim(),
       }));
     }
   };
 
+<<<<<<< Updated upstream
   const togglePasswordVisibility = (): void => setShowPassword((prev: boolean) => !prev);
   const toggleConfirmPasswordVisibility = (): void => setShowConfirmPassword((prev: boolean) => !prev);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const { first_name, last_name, name, companyEmail, address, phone, password, confirmPassword, country_id } = formData;
+=======
+  const togglePasswordVisibility = (): void => setShowPassword(prev => !prev);
+  const toggleConfirmPasswordVisibility = (): void => setShowConfirmPassword(prev => !prev);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
+    const { first_name, last_name, name, companyEmail, phone, password, confirmPassword, country_id } = formData;
+>>>>>>> Stashed changes
 
     if (!first_name || !name || !companyEmail || !password || !confirmPassword || !country_id) {
       showToast.error('Please fill in all required fields');
       return;
     }
 
+<<<<<<< Updated upstream
     const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+=======
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+>>>>>>> Stashed changes
     if (!emailRegex.test(companyEmail)) {
       showToast.error('Please enter a valid company email');
       return;
@@ -198,14 +284,22 @@ const RegisterPage: React.FC = () => {
           password,
           country_id,
           role_id: 'admin',
+<<<<<<< Updated upstream
         }) as any
+=======
+        })
+>>>>>>> Stashed changes
       ).unwrap();
 
       await dispatch(
         loginUser({
           email: companyEmail,
           password
+<<<<<<< Updated upstream
         }) as any
+=======
+        })
+>>>>>>> Stashed changes
       ).unwrap();
 
       setTimeout(() => {
@@ -213,17 +307,27 @@ const RegisterPage: React.FC = () => {
       }, 500);
 
       navigate('/workspaceCreate');
+<<<<<<< Updated upstream
     } catch (error: any) {
+=======
+
+    } catch (error) {
+>>>>>>> Stashed changes
       if (companyEmail === 'a@a.com') {
         navigate('/workspaceCreate');
       } else {
         console.error('Registration error:', error);
+<<<<<<< Updated upstream
         showToast.handleApiError(error);
+=======
+        showToast.error('Registration failed. Please try again.');
+>>>>>>> Stashed changes
       }
     }
   };
 
   // Handle Enter key press for ComboBox
+<<<<<<< Updated upstream
   const handleComboBoxKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -237,11 +341,28 @@ const RegisterPage: React.FC = () => {
           (nextElement as HTMLElement).focus();
         } else {
           handleSubmit(e as any);
+=======
+  const handleComboBoxKeyDown = (e: React.KeyboardEvent<HTMLElement>): void => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      // Find the first form element after the ComboBox and focus it
+      const form = (e.target as HTMLElement).closest('form');
+      if (form) {
+        const formElements = form.querySelectorAll<HTMLElement>('input, select, textarea, button');
+        const currentIndex = Array.from(formElements).indexOf(e.target as HTMLElement);
+        const nextElement = formElements[currentIndex + 1];
+        if (nextElement && (nextElement as HTMLInputElement).type !== 'submit') {
+          nextElement.focus();
+        } else {
+          // If it's the last field or next is submit button, submit the form
+          form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+>>>>>>> Stashed changes
         }
       }
     }
   };
 
+<<<<<<< Updated upstream
   const selectedCountry: Country | undefined = countries.find((c: Country) => c.id === formData.country_id) || undefined;
 
   const handleFilterChange = (event: ComboBoxFilterChangeEvent): void => {
@@ -249,13 +370,27 @@ const RegisterPage: React.FC = () => {
     setSearchTerm(value);
     const filtered: Country[] = countries.filter(
       (c: Country) => c.name.toLowerCase().includes(value.toLowerCase()) || c.id.toLowerCase().includes(value.toLowerCase())
+=======
+  const selectedCountry = countries.find(c => c.id === formData.country_id) || null;
+
+  const handleFilterChange = (event: ComboBoxFilterChangeEvent): void => {
+    const value = event.filter.value || '';
+    const filtered = countries.filter(
+      c => c.name.toLowerCase().includes(value.toLowerCase()) || c.id.toLowerCase().includes(value.toLowerCase())
+>>>>>>> Stashed changes
     );
     setFilteredCountries(filtered);
   };
 
+<<<<<<< Updated upstream
   const countryItemRender = (li: ComboBoxItemElement, itemProps: ItemRenderProps): ComboBoxItemElement => {
     const country: Country = itemProps.dataItem;
     return React.cloneElement(li, {
+=======
+  const countryItemRender = (li: React.ReactElement, itemProps: { dataItem: Country }): React.ReactElement => {
+    const country = itemProps.dataItem;
+    const newProps = {
+>>>>>>> Stashed changes
       ...li.props,
       children: (
         <div className="flex items-center gap-2 py-1">
@@ -263,6 +398,7 @@ const RegisterPage: React.FC = () => {
           <span>{country.name}</span>
         </div>
       ),
+<<<<<<< Updated upstream
     });
   };
 
@@ -272,6 +408,19 @@ const RegisterPage: React.FC = () => {
       <div className="flex items-center gap-2">
         <span>{value.flag}</span>
         <span>{value.name}</span>
+=======
+    };
+    return React.cloneElement(li, newProps as any);
+  };
+
+  const countryValueRender = (element: React.ReactElement): React.ReactNode => {
+    const country = selectedCountry;
+    if (!country) return element;
+    return (
+      <div className="flex items-center gap-2">
+        <span>{country.flag}</span>
+        <span>{country.name}</span>
+>>>>>>> Stashed changes
       </div>
     );
   };
@@ -372,14 +521,21 @@ const RegisterPage: React.FC = () => {
               />
             </div>
 
+<<<<<<< Updated upstream
             <div>
+=======
+            <div onKeyDown={handleComboBoxKeyDown}>
+>>>>>>> Stashed changes
               <ComboBox
                 data={filteredCountries}
                 textField="name"
                 dataItemKey="id"
                 value={selectedCountry}
                 onChange={handleCountryChange}
+<<<<<<< Updated upstream
                 onKeyDown={handleComboBoxKeyDown}
+=======
+>>>>>>> Stashed changes
                 filterable
                 onFilterChange={handleFilterChange}
                 itemRender={countryItemRender}

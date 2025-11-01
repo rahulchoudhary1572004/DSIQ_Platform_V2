@@ -1,9 +1,17 @@
+<<<<<<< Updated upstream
 import React, { useState, useEffect, type JSX } from 'react';
+=======
+import React, { useState, useEffect } from 'react';
+>>>>>>> Stashed changes
 import { HelpCircle, ChevronDown, ArrowLeft, X, Paperclip, AlertTriangle, CheckCircle, Clock, Search, Filter, User, MessageSquare, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import showToast from '../../utils/toast';
 
+<<<<<<< Updated upstream
 // Type Definitions
+=======
+// Type definitions
+>>>>>>> Stashed changes
 interface FAQ {
   question: string;
   answer: string;
@@ -32,7 +40,11 @@ interface Ticket {
   comments: Comment[];
 }
 
+<<<<<<< Updated upstream
 interface TicketForm {
+=======
+interface TicketFormData {
+>>>>>>> Stashed changes
   title: string;
   description: string;
   category: string;
@@ -45,6 +57,7 @@ interface SuggestedArticle extends FAQ {
   category: string;
 }
 
+<<<<<<< Updated upstream
 interface StatusClassMap {
   [key: string]: string;
 }
@@ -60,6 +73,15 @@ interface IconMap {
 const HelpPage: React.FC = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'help' | 'tickets'>('help');
+=======
+type TabType = 'help' | 'tickets';
+type StatusFilter = 'All Status' | 'Open' | 'In Progress' | 'Resolved' | 'Closed';
+type CategoryFilter = 'All Categories' | string;
+
+const HelpPage: React.FC = () => {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<TabType>('help');
+>>>>>>> Stashed changes
   const [showTicketForm, setShowTicketForm] = useState<boolean>(false);
   const [showFeedback, setShowFeedback] = useState<boolean>(false);
   const [suggestedArticles, setSuggestedArticles] = useState<SuggestedArticle[]>([]);
@@ -68,7 +90,11 @@ const HelpPage: React.FC = () => {
   const [feedbackComment, setFeedbackComment] = useState<string>('');
 
   // Form state
+<<<<<<< Updated upstream
   const [ticketForm, setTicketForm] = useState<TicketForm>({
+=======
+  const [ticketForm, setTicketForm] = useState<TicketFormData>({
+>>>>>>> Stashed changes
     title: '',
     description: '',
     category: '',
@@ -79,8 +105,13 @@ const HelpPage: React.FC = () => {
 
   // Search & filter states
   const [searchTerm, setSearchTerm] = useState<string>('');
+<<<<<<< Updated upstream
   const [filterStatus, setFilterStatus] = useState<string>('All Status');
   const [filterCategory, setFilterCategory] = useState<string>('All Categories');
+=======
+  const [filterStatus, setFilterStatus] = useState<StatusFilter>('All Status');
+  const [filterCategory, setFilterCategory] = useState<CategoryFilter>('All Categories');
+>>>>>>> Stashed changes
 
   // Sample data
   const helpTopics: HelpTopic[] = [
@@ -139,6 +170,10 @@ const HelpPage: React.FC = () => {
 
   // Sample tickets data
   useEffect(() => {
+<<<<<<< Updated upstream
+=======
+    // In a real app, this would come from an API
+>>>>>>> Stashed changes
     const sampleTickets: Ticket[] = [
       {
         id: 'DSIQ-1245',
@@ -186,6 +221,7 @@ const HelpPage: React.FC = () => {
     setTickets(sampleTickets);
   }, []);
 
+<<<<<<< Updated upstream
   const handleGoBack = async (): Promise<void> => await navigate(-1);
   const handleDashboardClick = async (): Promise<void> => await navigate('/');
 
@@ -193,16 +229,32 @@ const HelpPage: React.FC = () => {
     const target = e.target as HTMLInputElement;
     const { name, value, type, checked } = target;
     setTicketForm((prev: TicketForm) => ({
+=======
+  const handleGoBack = () => navigate(-1);
+  const handleDashboardClick = () => navigate('/');
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): void => {
+    const target = e.target as HTMLInputElement;
+    const { name, value, type } = target;
+    const checked = type === 'checkbox' ? target.checked : undefined;
+    
+    setTicketForm(prev => ({
+>>>>>>> Stashed changes
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
 
+<<<<<<< Updated upstream
+=======
+    // Show smart suggestions when description changes
+>>>>>>> Stashed changes
     if (name === 'description' && value.length > 20) {
       findSuggestedArticles(value);
     }
   };
 
   const findSuggestedArticles = (text: string): void => {
+<<<<<<< Updated upstream
     const keywords: string[] = text.toLowerCase().split(' ');
     const matchedArticles: SuggestedArticle[] = helpTopics
       .flatMap((topic: HelpTopic) => topic.faqs.map((faq: FAQ) => ({
@@ -211,6 +263,17 @@ const HelpPage: React.FC = () => {
       })))
       .filter((faq: SuggestedArticle) => 
         keywords.some((keyword: string) => 
+=======
+    // In a real app, this would search your knowledge base
+    const keywords = text.toLowerCase().split(' ');
+    const matchedArticles = helpTopics
+      .flatMap(topic => topic.faqs.map(faq => ({
+        ...faq,
+        category: topic.title
+      })))
+      .filter(faq => 
+        keywords.some(keyword => 
+>>>>>>> Stashed changes
           faq.question.toLowerCase().includes(keyword) || 
           faq.answer.toLowerCase().includes(keyword)
         )
@@ -221,22 +284,37 @@ const HelpPage: React.FC = () => {
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>): void => {
+<<<<<<< Updated upstream
     const files: File[] = Array.from(e.target.files || []);
     setTicketForm((prev: TicketForm) => ({
+=======
+    const files = e.target.files ? Array.from(e.target.files) : [];
+    setTicketForm(prev => ({
+>>>>>>> Stashed changes
       ...prev,
       attachments: [...prev.attachments, ...files]
     }));
   };
 
   const removeAttachment = (index: number): void => {
+<<<<<<< Updated upstream
     setTicketForm((prev: TicketForm) => ({
       ...prev,
       attachments: prev.attachments.filter((_: File, i: number) => i !== index)
+=======
+    setTicketForm(prev => ({
+      ...prev,
+      attachments: prev.attachments.filter((_, i) => i !== index)
+>>>>>>> Stashed changes
     }));
   };
 
   const submitTicket = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+<<<<<<< Updated upstream
+=======
+    // In a real app, this would submit to your backend
+>>>>>>> Stashed changes
     const newTicket: Ticket = {
       id: `DSIQ-${Math.floor(1000 + Math.random() * 9000)}`,
       title: ticketForm.title,
@@ -248,7 +326,11 @@ const HelpPage: React.FC = () => {
       comments: []
     };
     
+<<<<<<< Updated upstream
     setTickets((prev: Ticket[]) => [newTicket, ...prev]);
+=======
+    setTickets(prev => [newTicket, ...prev]);
+>>>>>>> Stashed changes
     setShowTicketForm(false);
     setTicketForm({
       title: '',
@@ -261,27 +343,47 @@ const HelpPage: React.FC = () => {
     
     showToast.success('Ticket submitted successfully!');
 
+<<<<<<< Updated upstream
+=======
+    // For demo purposes, show feedback after 5 seconds
+>>>>>>> Stashed changes
     setTimeout(() => {
       setShowFeedback(true);
     }, 5000);
   };
 
   const submitFeedback = (): void => {
+<<<<<<< Updated upstream
+=======
+    // In a real app, this would submit to your backend
+>>>>>>> Stashed changes
     console.log('Feedback submitted:', { rating: feedbackRating, comment: feedbackComment });
     setShowFeedback(false);
     setFeedbackRating(0);
     setFeedbackComment('');
+<<<<<<< Updated upstream
   };
 
   const renderStatusBadge = (status: string): JSX.Element => {
     const statusClasses: StatusClassMap = {
+=======
+    showToast.success('Thank you for your feedback!');
+  };
+
+  const renderStatusBadge = (status: Ticket['status']): React.ReactElement => {
+    const statusClasses: Record<Ticket['status'], string> = {
+>>>>>>> Stashed changes
       'Open': 'bg-blue-100 text-blue-800',
       'In Progress': 'bg-yellow-100 text-yellow-800',
       'Resolved': 'bg-green-100 text-green-800',
       'Closed': 'bg-gray-100 text-gray-800'
     };
     
+<<<<<<< Updated upstream
     const icons: IconMap = {
+=======
+    const icons: Record<Ticket['status'], React.ReactElement> = {
+>>>>>>> Stashed changes
       'Open': <Clock size={14} className="mr-1" />,
       'In Progress': <AlertTriangle size={14} className="mr-1" />,
       'Resolved': <CheckCircle size={14} className="mr-1" />,
@@ -296,8 +398,13 @@ const HelpPage: React.FC = () => {
     );
   };
 
+<<<<<<< Updated upstream
   const renderPriorityBadge = (priority: string): JSX.Element => {
     const priorityClasses: PriorityClassMap = {
+=======
+  const renderPriorityBadge = (priority: Ticket['priority']): React.ReactElement => {
+    const priorityClasses: Record<Ticket['priority'], string> = {
+>>>>>>> Stashed changes
       'Low': 'bg-gray-100 text-gray-800',
       'Medium': 'bg-blue-100 text-blue-800',
       'High': 'bg-yellow-100 text-yellow-800',
@@ -311,6 +418,7 @@ const HelpPage: React.FC = () => {
     );
   };
 
+<<<<<<< Updated upstream
   const filteredTickets: Ticket[] = tickets.filter((ticket: Ticket) => {
     const matchesSearch: boolean = 
       ticket.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -319,6 +427,17 @@ const HelpPage: React.FC = () => {
     const matchesStatus: boolean = filterStatus === 'All Status' || ticket.status === filterStatus;
     
     const matchesCategory: boolean = filterCategory === 'All Categories' || ticket.category === filterCategory;
+=======
+  // Derived filtered ticket list based on search and filters
+  const filteredTickets = tickets.filter(ticket => {
+    const matchesSearch = 
+      ticket.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      ticket.title.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesStatus = filterStatus === 'All Status' || ticket.status === filterStatus;
+    
+    const matchesCategory = filterCategory === 'All Categories' || ticket.category === filterCategory;
+>>>>>>> Stashed changes
 
     return matchesSearch && matchesStatus && matchesCategory;
   });
@@ -364,13 +483,21 @@ const HelpPage: React.FC = () => {
 
       {activeTab === 'help' && (
         <div className="space-y-6">
+<<<<<<< Updated upstream
           {helpTopics.map((topic: HelpTopic, index: number) => (
+=======
+          {helpTopics.map((topic, index) => (
+>>>>>>> Stashed changes
             <div key={index} className="p-6 bg-white rounded-lg shadow-sm border border-gray-200">
               <h2 className="text-xl font-semibold mb-1">{topic.title}</h2>
               <p className="text-sm text-gray-600 mb-4">{topic.description}</p>
 
               <div className="space-y-2">
+<<<<<<< Updated upstream
                 {topic.faqs.map((faq: FAQ, idx: number) => (
+=======
+                {topic.faqs.map((faq, idx) => (
+>>>>>>> Stashed changes
                   <details
                     key={idx}
                     className="group border-b border-gray-200 py-2 cursor-pointer"
@@ -421,7 +548,11 @@ const HelpPage: React.FC = () => {
                 placeholder="Search tickets..."
                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full focus:ring-blue-500 focus:border-blue-500"
                 value={searchTerm}
+<<<<<<< Updated upstream
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+=======
+                onChange={(e) => setSearchTerm(e.target.value)}
+>>>>>>> Stashed changes
               />
             </div>
             <div className="flex space-x-2">
@@ -429,7 +560,11 @@ const HelpPage: React.FC = () => {
                 <select 
                   className="appearance-none pl-3 pr-8 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   value={filterStatus}
+<<<<<<< Updated upstream
                   onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterStatus(e.target.value)}
+=======
+                  onChange={(e) => setFilterStatus(e.target.value as StatusFilter)}
+>>>>>>> Stashed changes
                 >
                   <option>All Status</option>
                   <option>Open</option>
@@ -445,10 +580,17 @@ const HelpPage: React.FC = () => {
                 <select 
                   className="appearance-none pl-3 pr-8 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   value={filterCategory}
+<<<<<<< Updated upstream
                   onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterCategory(e.target.value)}
                 >
                   <option>All Categories</option>
                   {categories.map((cat: string) => <option key={cat}>{cat}</option>)}
+=======
+                  onChange={(e) => setFilterCategory(e.target.value)}
+                >
+                  <option>All Categories</option>
+                  {categories.map(cat => <option key={cat}>{cat}</option>)}
+>>>>>>> Stashed changes
                 </select>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                   <Filter size={16} className="text-gray-400" />
@@ -473,7 +615,11 @@ const HelpPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
+<<<<<<< Updated upstream
                 {filteredTickets.map((ticket: Ticket) => (
+=======
+                {filteredTickets.map((ticket) => (
+>>>>>>> Stashed changes
                   <tr key={ticket.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">{ticket.id}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{ticket.title}</td>
@@ -569,12 +715,36 @@ const HelpPage: React.FC = () => {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="">Select a category</option>
+<<<<<<< Updated upstream
                       {categories.map((cat: string) => (
+=======
+                      {categories.map(cat => (
+>>>>>>> Stashed changes
                         <option key={cat} value={cat}>{cat}</option>
                       ))}
                     </select>
                   </div>
+<<<<<<< Updated upstream
                 
+=======
+
+                  <div>
+                    <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                    <select
+                      id="priority"
+                      name="priority"
+                      value={ticketForm.priority}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="Low">Low</option>
+                      <option value="Medium">Medium</option>
+                      <option value="High">High</option>
+                      <option value="Critical">Critical</option>
+                    </select>
+                  </div>
+              
+>>>>>>> Stashed changes
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Attachments</label>
                     <div className="flex items-center">
@@ -592,7 +762,11 @@ const HelpPage: React.FC = () => {
                     </div>
                     {ticketForm.attachments.length > 0 && (
                       <div className="mt-2 space-y-1">
+<<<<<<< Updated upstream
                         {ticketForm.attachments.map((file: File, index: number) => (
+=======
+                        {ticketForm.attachments.map((file, index) => (
+>>>>>>> Stashed changes
                           <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
                             <span className="text-sm truncate max-w-xs">{file.name}</span>
                             <button 
@@ -630,7 +804,11 @@ const HelpPage: React.FC = () => {
                         Before you submit, check these resources:
                       </h4>
                       <ul className="space-y-2">
+<<<<<<< Updated upstream
                         {suggestedArticles.map((article: SuggestedArticle, index: number) => (
+=======
+                        {suggestedArticles.map((article, index) => (
+>>>>>>> Stashed changes
                           <li key={index} className="text-sm">
                             <a href="#" className="text-blue-600 hover:text-blue-800 hover:underline">
                               {article.category}: {article.question}
@@ -676,6 +854,10 @@ const HelpPage: React.FC = () => {
                   </div>
                 </div>
               </form>
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
             </div>
           </div>
         </div>
@@ -699,7 +881,11 @@ const HelpPage: React.FC = () => {
               <div className="space-y-4">
                 <div className="text-center">
                   <div className="flex justify-center space-x-2 mb-2">
+<<<<<<< Updated upstream
                     {[1, 2, 3, 4, 5].map((star: number) => (
+=======
+                    {[1, 2, 3, 4, 5].map((star) => (
+>>>>>>> Stashed changes
                       <button
                         key={star}
                         type="button"
@@ -723,7 +909,11 @@ const HelpPage: React.FC = () => {
                   <textarea
                     id="feedbackComment"
                     value={feedbackComment}
+<<<<<<< Updated upstream
                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFeedbackComment(e.target.value)}
+=======
+                    onChange={(e) => setFeedbackComment(e.target.value)}
+>>>>>>> Stashed changes
                     rows={3}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Tell us more about your experience..."
