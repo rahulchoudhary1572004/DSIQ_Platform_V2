@@ -1,17 +1,29 @@
+<<<<<<< Updated upstream
 import { useState, type ChangeEvent, type FormEvent } from 'react';
+=======
+import React, { useState } from 'react';
+>>>>>>> Stashed changes
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, forgotPassword } from '../redux/slices/authSlice';
 import { Eye, EyeOff } from 'lucide-react';
 import showToast from '../../utils/toast';
 import AuthLayout from '../components/AuthLayout';
+<<<<<<< Updated upstream
 
 // Type Definitions
 interface FormData {
+=======
+import type { RootState, AppDispatch } from '../redux/store';
+
+// Type definitions
+interface LoginFormData {
+>>>>>>> Stashed changes
   email: string;
   password: string;
 }
 
+<<<<<<< Updated upstream
 interface AuthState {
   auth: {
     loading: boolean;
@@ -47,13 +59,40 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     const { email, password } = formData;
     
+=======
+type ResetStatus = 'idle' | 'sending' | 'sent';
+
+const LoginPage: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const { loading } = useSelector((state: RootState) => state.auth);
+
+  const [formData, setFormData] = useState<LoginFormData>({ email: '', password: '' });
+  const [showReset, setShowReset] = useState<boolean>(false);
+  const [resetEmail, setResetEmail] = useState<string>('');
+  const [resetStatus, setResetStatus] = useState<ResetStatus>('idle');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
+    const { email, password } = formData;
+>>>>>>> Stashed changes
     if (!email || !password) {
       showToast.warning('Please fill in all fields.');
       return;
     }
 
     console.log('Dispatching loginUser...');
+<<<<<<< Updated upstream
     const resultAction = await dispatch(loginUser({ email, password }) as any);
+=======
+    const resultAction = await dispatch(loginUser({ email, password }));
+>>>>>>> Stashed changes
 
     console.log('Result Action:', resultAction);
 
@@ -75,8 +114,12 @@ const LoginPage: React.FC = () => {
     }
 
     setResetStatus('sending');
+<<<<<<< Updated upstream
     dispatch(forgotPassword(resetEmail) as any);
     
+=======
+    dispatch(forgotPassword(resetEmail));
+>>>>>>> Stashed changes
     setTimeout(() => {
       setResetStatus('sent');
       showToast.success(`Password reset link sent to ${resetEmail}`, {
@@ -142,7 +185,11 @@ const LoginPage: React.FC = () => {
                   placeholder="you@example.com"
                   className="w-full p-3 border border-light-gray rounded-md text-body focus:outline-none focus:ring-2 focus:ring-primary-orange focus:border-transparent"
                   value={resetEmail}
+<<<<<<< Updated upstream
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
+=======
+                  onChange={(e) => {
+>>>>>>> Stashed changes
                     setResetEmail(e.target.value);
                     setResetStatus('idle');
                   }}
@@ -154,6 +201,7 @@ const LoginPage: React.FC = () => {
               <button
                 onClick={handleResetSubmit}
                 disabled={resetStatus !== 'idle'}
+<<<<<<< Updated upstream
                 className={`w-full py-3 px-4 text-white font-medium rounded-md transition-all duration-200 ${
                   resetStatus === 'sending'
                     ? 'bg-gray cursor-not-allowed'
@@ -161,12 +209,25 @@ const LoginPage: React.FC = () => {
                     ? 'bg-success-green cursor-not-allowed'
                     : 'bg-primary-orange hover:bg-accent-magenta'
                 }`}
+=======
+                className={`w-full py-3 px-4 text-white font-medium rounded-md transition-all duration-200 ${resetStatus === 'sending'
+                  ? 'bg-gray cursor-not-allowed'
+                  : resetStatus === 'sent'
+                    ? 'bg-success-green cursor-not-allowed'
+                    : 'bg-primary-orange hover:bg-accent-magenta'
+                  }`}
+>>>>>>> Stashed changes
               >
                 {resetStatus === 'sending'
                   ? 'Sending...'
                   : resetStatus === 'sent'
+<<<<<<< Updated upstream
                   ? 'Link Sent!'
                   : 'Send Reset Link'}
+=======
+                    ? 'Link Sent!'
+                    : 'Send Reset Link'}
+>>>>>>> Stashed changes
               </button>
 
               <button
@@ -182,7 +243,10 @@ const LoginPage: React.FC = () => {
           ) : (
             <form onSubmit={handleLoginSubmit}>
               <h2 className="text-h3 text-dark-gray mb-8 font-medium">Sign in to your account</h2>
+<<<<<<< Updated upstream
               
+=======
+>>>>>>> Stashed changes
               <div className="mb-6">
                 <label className="block text-body font-medium text-dark-gray mb-2">Email</label>
                 <input

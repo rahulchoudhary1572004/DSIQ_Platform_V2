@@ -1,5 +1,9 @@
+<<<<<<< Updated upstream
 // src/components/WorkspaceCreation.tsx
 import { useState, useEffect, useCallback, useMemo, useRef, type ReactNode } from "react";
+=======
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
+>>>>>>> Stashed changes
 import {
   Card,
   CardHeader,
@@ -26,6 +30,7 @@ import {
   fetchRetailers,
   createWorkspace,
 } from "../../utils/workspaceApi";
+<<<<<<< Updated upstream
 import { getModuleIdByName } from "../../utils/getModuleIdByName";
 
 // Type Definitions
@@ -76,6 +81,54 @@ interface DebouncedFunction {
   (name: string): void;
   cancel: () => void;
 }
+=======
+import { getModuleIdByName } from "../utils/getModuleIdByName";
+
+// Type definitions
+interface StepInfo {
+  number: number;
+  label: string;
+  icon: React.ReactElement;
+}
+
+interface SelectedCategories {
+  [retailerId: string]: string[];
+}
+
+interface SelectedBrands {
+  [categoryId: string]: string[];
+}
+
+interface CategoriesByRetailer {
+  [retailerId: string]: any[];
+}
+
+interface Retailer {
+  id: string;
+  name: string;
+  [key: string]: any;
+}
+
+interface WorkspaceDataItem {
+  category_id: string;
+  retailer_id: string;
+}
+
+interface WorkspacePayload {
+  name: string;
+  data: WorkspaceDataItem[];
+  module_id: string;
+}
+
+interface ApiResult {
+  success: boolean;
+  data?: any;
+  message?: string;
+  available?: boolean;
+}
+
+type DebouncedFunction = ((...args: any[]) => void) & { cancel: () => void };
+>>>>>>> Stashed changes
 
 const WorkspaceCreation: React.FC = () => {
   const navigate = useNavigate();
@@ -88,11 +141,16 @@ const WorkspaceCreation: React.FC = () => {
   const [selectedRetailers, setSelectedRetailers] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<SelectedCategories>({});
   const [selectedBrands, setSelectedBrands] = useState<SelectedBrands>({});
+<<<<<<< Updated upstream
   const [retailers, setRetailers] = useState<any[]>([]);
+=======
+  const [retailers, setRetailers] = useState<Retailer[]>([]);
+>>>>>>> Stashed changes
   const [categoriesByRetailer, setCategoriesByRetailer] = useState<CategoriesByRetailer>({});
   const [loadingRetailers, setLoadingRetailers] = useState<boolean>(false);
   const [retailersError, setRetailersError] = useState<string | null>(null);
 
+<<<<<<< Updated upstream
   const hasWorkspace: boolean = localStorage.getItem("hasWorkspace") === "true";
 
   // Memoized props
@@ -106,11 +164,27 @@ const WorkspaceCreation: React.FC = () => {
   );
   const memoizedRetailers = useMemo<any[]>(() => retailers, [retailers]);
   const memoizedCategoriesByRetailer = useMemo<CategoriesByRetailer>(
+=======
+  const hasWorkspace = localStorage.getItem("hasWorkspace") === "true";
+
+  // Memoized props
+  const memoizedSelectedRetailers = useMemo(
+    () => selectedRetailers,
+    [selectedRetailers]
+  );
+  const memoizedSelectedCategories = useMemo(
+    () => selectedCategories,
+    [selectedCategories]
+  );
+  const memoizedRetailers = useMemo(() => retailers, [retailers]);
+  const memoizedCategoriesByRetailer = useMemo(
+>>>>>>> Stashed changes
     () => categoriesByRetailer,
     [categoriesByRetailer]
   );
 
   // Debounce function with cleanup
+<<<<<<< Updated upstream
   const debounce = useCallback(
     (func: (name: string) => Promise<void>, delay: number): DebouncedFunction => {
       let timeoutId: ReturnType<typeof setTimeout>;
@@ -127,10 +201,26 @@ const WorkspaceCreation: React.FC = () => {
     },
     []
   );
+=======
+  const debounce = useCallback((func: (...args: any[]) => void, delay: number): DebouncedFunction => {
+    let timeoutId: NodeJS.Timeout;
+    const debouncedFunction = (...args: any[]): void => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+
+    debouncedFunction.cancel = (): void => {
+      clearTimeout(timeoutId);
+    };
+
+    return debouncedFunction as DebouncedFunction;
+  }, []);
+>>>>>>> Stashed changes
 
   const latestRequestRef = useRef<number | null>(null);
 
   // Check workspace name availability
+<<<<<<< Updated upstream
   const checkWorkspaceNameAvailability = useCallback(
     async (name: string): Promise<void> => {
       console.log("API call started for:", name);
@@ -179,6 +269,53 @@ const WorkspaceCreation: React.FC = () => {
     },
     []
   );
+=======
+  const checkWorkspaceNameAvailability = useCallback(async (name: string): Promise<void> => {
+    console.log("API call started for:", name);
+
+    if (!name.trim()) {
+      setIsNameAvailable(null);
+      setWorkspaceNameError("Workspace name is required");
+      setIsCheckingName(false);
+      return;
+    }
+
+    // Create a unique request ID
+    const requestId = Date.now();
+    latestRequestRef.current = requestId;
+
+    try {
+      const result: ApiResult = await checkWorkspaceName(name);
+      console.log("API result:", result);
+
+      // Only update state if this is still the latest request
+      if (latestRequestRef.current === requestId) {
+        setIsNameAvailable(result.available ?? false);
+        if (result.available) {
+          setWorkspaceNameError("");
+        } else {
+          setWorkspaceNameError(
+            result.message || "Workspace name is not available"
+          );
+        }
+        setIsCheckingName(false);
+        console.log("State updated for latest request");
+      } else {
+        console.log("Outdated request, ignoring result");
+      }
+    } catch (error) {
+      console.error("Error checking workspace name:", error);
+      // Only show error if this is still the latest request
+      if (latestRequestRef.current === requestId) {
+        setIsNameAvailable(false);
+        setWorkspaceNameError(
+          "Error checking workspace name. Please try again."
+        );
+        setIsCheckingName(false);
+      }
+    }
+  }, []);
+>>>>>>> Stashed changes
 
   const debouncedCheckWorkspaceName = useCallback(
     debounce(checkWorkspaceNameAvailability, 500),
@@ -186,7 +323,11 @@ const WorkspaceCreation: React.FC = () => {
   );
 
   const handleWorkspaceNameChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+<<<<<<< Updated upstream
     const name: string = e.target.value;
+=======
+    const name = e.target.value;
+>>>>>>> Stashed changes
     setWorkspaceName(name);
     console.log("Input changed to:", name);
 
@@ -223,7 +364,11 @@ const WorkspaceCreation: React.FC = () => {
     const loadRetailers = async (): Promise<void> => {
       setLoadingRetailers(true);
       try {
+<<<<<<< Updated upstream
         const result: FetchRetailersResult = await fetchRetailers();
+=======
+        const result: ApiResult = await fetchRetailers();
+>>>>>>> Stashed changes
         if (result.success) {
           setRetailers(result.data);
           setRetailersError(null);
@@ -241,7 +386,11 @@ const WorkspaceCreation: React.FC = () => {
     loadRetailers();
   }, []);
 
+<<<<<<< Updated upstream
   const isNextDisabled = useMemo<boolean>(() => {
+=======
+  const isNextDisabled = useMemo(() => {
+>>>>>>> Stashed changes
     if (step === 1) {
       return (
         selectedRetailers.length === 0 || !isNameAvailable || isCheckingName
@@ -253,7 +402,11 @@ const WorkspaceCreation: React.FC = () => {
         isCheckingName ||
         selectedRetailers.length === 0 ||
         !selectedRetailers.every(
+<<<<<<< Updated upstream
           (retailerId: string) =>
+=======
+          (retailerId) =>
+>>>>>>> Stashed changes
             selectedCategories[retailerId] &&
             selectedCategories[retailerId].length > 0
         )
@@ -268,9 +421,15 @@ const WorkspaceCreation: React.FC = () => {
     isCheckingName,
   ]);
 
+<<<<<<< Updated upstream
   const isSubmitDisabled: boolean =
     !workspaceName ||
     !!workspaceNameError ||
+=======
+  const isSubmitDisabled =
+    !workspaceName ||
+    workspaceNameError ||
+>>>>>>> Stashed changes
     !isNameAvailable ||
     isCheckingName ||
     selectedRetailers.length === 0 ||
@@ -278,6 +437,7 @@ const WorkspaceCreation: React.FC = () => {
 
   const handleSubmit = async (): Promise<void> => {
     try {
+<<<<<<< Updated upstream
       const moduleId: string = getModuleIdByName("Workspace");
 
       const data: Array<{
@@ -286,18 +446,33 @@ const WorkspaceCreation: React.FC = () => {
       }> = Object.entries(selectedCategories).flatMap(
         ([retailerId, categoryIds]: [string, string[]]) =>
           categoryIds.map((categoryId: string) => ({
+=======
+      const moduleId = getModuleIdByName("Workspace");
+
+      const data: WorkspaceDataItem[] = Object.entries(selectedCategories).flatMap(
+        ([retailerId, categoryIds]) =>
+          categoryIds.map((categoryId) => ({
+>>>>>>> Stashed changes
             category_id: categoryId,
             retailer_id: retailerId,
           }))
       );
 
+<<<<<<< Updated upstream
       const workspaceData: WorkspaceData = {
+=======
+      const workspaceData: WorkspacePayload = {
+>>>>>>> Stashed changes
         name: workspaceName,
         data,
         module_id: moduleId,
       };
 
+<<<<<<< Updated upstream
       const result: CreateWorkspaceResult = await createWorkspace(workspaceData);
+=======
+      const result: ApiResult = await createWorkspace(workspaceData);
+>>>>>>> Stashed changes
       if (result.success) {
         showToast.success(`Workspace "${workspaceName}" created successfully!`);
         setTimeout(() => {
@@ -313,8 +488,13 @@ const WorkspaceCreation: React.FC = () => {
     }
   };
 
+<<<<<<< Updated upstream
   const renderProgressBar = (): ReactNode => {
     const steps: Step[] = [
+=======
+  const renderProgressBar = (): React.ReactElement => {
+    const steps: StepInfo[] = [
+>>>>>>> Stashed changes
       { number: 1, label: "Retailers", icon: <FiShoppingCart /> },
       { number: 2, label: "Categories", icon: <FiGrid /> },
       { number: 3, label: "My Brands", icon: <FiTag /> },
@@ -329,7 +509,11 @@ const WorkspaceCreation: React.FC = () => {
           />
         </div>
         <div className="flex justify-between relative z-10 px-4">
+<<<<<<< Updated upstream
           {steps.map((s: Step) => (
+=======
+          {steps.map((s) => (
+>>>>>>> Stashed changes
             <div key={s.number} className="flex flex-col items-center">
               <div
                 className={clsx(
@@ -356,7 +540,11 @@ const WorkspaceCreation: React.FC = () => {
     );
   };
 
+<<<<<<< Updated upstream
   const renderContent = (): ReactNode => (
+=======
+  const renderContent = (): React.ReactElement => (
+>>>>>>> Stashed changes
     <Card className="w-full max-h-[calc(100vh-4rem)] min-h-0 bg-white rounded-2xl shadow-xl overflow-y-auto border border-light-gray flex flex-col font-sans">
       <CardHeader className="border-b border-light-gray bg-cream">
         <CardTitle className="!text-h3 !font-bold text-accent-magenta text-center">
@@ -472,7 +660,11 @@ const WorkspaceCreation: React.FC = () => {
         {step > 1 ? (
           <button
             type="button"
+<<<<<<< Updated upstream
             onClick={() => setStep((prev: number) => prev - 1)}
+=======
+            onClick={() => setStep((prev) => prev - 1)}
+>>>>>>> Stashed changes
             className="px-4 py-2 rounded-lg border-2 border-primary-orange text-primary-orange hover:bg-peach transition-all duration-300 text-button font-medium flex items-center"
           >
             <FiChevronLeft className="mr-2" /> Back
@@ -483,7 +675,11 @@ const WorkspaceCreation: React.FC = () => {
         {step < 3 ? (
           <button
             type="button"
+<<<<<<< Updated upstream
             onClick={() => setStep((prev: number) => prev + 1)}
+=======
+            onClick={() => setStep((prev) => prev + 1)}
+>>>>>>> Stashed changes
             disabled={isNextDisabled}
             className={clsx(
               "px-4 py-2 rounded-lg bg-primary-orange text-white hover:bg-brand-gradient transition-all duration-300 text-button font-medium flex items-center",

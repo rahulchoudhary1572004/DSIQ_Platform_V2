@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 import { useState, useEffect, ReactNode } from 'react';
+=======
+import React, { useState, useEffect } from 'react';
+>>>>>>> Stashed changes
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Users, History, Database, ChevronRight, ChevronDown, ChevronLeft } from 'lucide-react';
@@ -13,6 +17,7 @@ import WelcomeScreen from '../components/SettingPage/WelcomeScreen';
 import RolesManagement from '../components/SettingPage/RolesManagement';
 import Navbar from '../components/Navbar';
 import '@progress/kendo-theme-default/dist/all.css';
+<<<<<<< Updated upstream
 
 // Type Definitions
 interface Role {
@@ -20,6 +25,13 @@ interface Role {
   name: string;
   [key: string]: any;
 }
+=======
+import type { RootState, AppDispatch } from '../redux/store';
+
+// Type definitions
+type SectionKey = 'user-management' | 'activity-history' | 'data-management';
+type SubSectionKey = 'users' | 'roles' | 'activity-logs' | 'data-export' | 'privacy-preferences' | 'backup-restore' | '';
+>>>>>>> Stashed changes
 
 interface ExpandedSections {
   'user-management': boolean;
@@ -27,6 +39,7 @@ interface ExpandedSections {
   'data-management': boolean;
 }
 
+<<<<<<< Updated upstream
 interface RolesState {
   roles: Role[];
   loading: boolean;
@@ -53,6 +66,15 @@ const SettingsPage: React.FC = () => {
   
   const [activeSection, setActiveSection] = useState<MainSection>('');
   const [activeSubSection, setActiveSubSection] = useState<SubSection>('');
+=======
+const SettingsPage: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { roles, loading: loadingRoles, error: rolesError, archiveFilter } = useSelector((state: RootState) => state.roles);
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  
+  const [activeSection, setActiveSection] = useState<SectionKey | ''>('');
+  const [activeSubSection, setActiveSubSection] = useState<SubSectionKey>('');
+>>>>>>> Stashed changes
   const [expandedSections, setExpandedSections] = useState<ExpandedSections>({
     'user-management': false,
     'activity-history': false,
@@ -63,6 +85,7 @@ const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+<<<<<<< Updated upstream
     dispatch(fetchRoles(archiveFilter === 'archived') as any);
 
     // Restore saved navigation state on component mount
@@ -76,11 +99,30 @@ const SettingsPage: React.FC = () => {
     
     if (savedActiveSubSection) {
       setActiveSubSection(savedActiveSubSection as SubSection);
+=======
+    dispatch(fetchRoles(archiveFilter === 'archived'));
+
+    // Restore saved navigation state on component mount
+    const savedActiveSection = localStorage.getItem('settings-activeSection');
+    const savedActiveSubSection = localStorage.getItem('settings-activeSubSection');
+    const savedExpandedSections = localStorage.getItem('settings-expandedSections');
+
+    if (savedActiveSection) {
+      setActiveSection(savedActiveSection as SectionKey);
+    }
+    
+    if (savedActiveSubSection) {
+      setActiveSubSection(savedActiveSubSection as SubSectionKey);
+>>>>>>> Stashed changes
     }
     
     if (savedExpandedSections) {
       try {
+<<<<<<< Updated upstream
         const parsedExpandedSections: ExpandedSections = JSON.parse(savedExpandedSections);
+=======
+        const parsedExpandedSections = JSON.parse(savedExpandedSections) as ExpandedSections;
+>>>>>>> Stashed changes
         setExpandedSections(parsedExpandedSections);
       } catch (error) {
         console.error('Error parsing saved expanded sections:', error);
@@ -88,7 +130,11 @@ const SettingsPage: React.FC = () => {
     }
   }, [dispatch, archiveFilter]);
 
+<<<<<<< Updated upstream
   const toggleSection = (section: MainSection): void => {
+=======
+  const toggleSection = (section: SectionKey): void => {
+>>>>>>> Stashed changes
     const newExpandedSections: ExpandedSections = {
       ...expandedSections,
       [section]: !expandedSections[section],
@@ -101,7 +147,11 @@ const SettingsPage: React.FC = () => {
     localStorage.setItem('settings-activeSection', section);
   };
 
+<<<<<<< Updated upstream
   const handleSubSectionClick = (section: MainSection, subSection: SubSection): void => {
+=======
+  const handleSubSectionClick = (section: SectionKey, subSection: SubSectionKey): void => {
+>>>>>>> Stashed changes
     setActiveSection(section);
     setActiveSubSection(subSection);
     const newExpandedSections: ExpandedSections = {
@@ -137,10 +187,17 @@ const SettingsPage: React.FC = () => {
   };
 
   const handleRoleCreated = (): void => {
+<<<<<<< Updated upstream
     dispatch(fetchRoles(archiveFilter === 'archived') as any);
   };
 
   const renderContent = (): ReactNode => {
+=======
+    dispatch(fetchRoles(archiveFilter === 'archived'));
+  };
+
+  const renderContent = (): React.ReactNode => {
+>>>>>>> Stashed changes
     if (activeSubSection === 'roles' && showCreateRoleForm) {
       return (
         <CreateRoles
