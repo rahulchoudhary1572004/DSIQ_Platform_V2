@@ -13,7 +13,6 @@ import {
   Archive,
   HardDrive,
   X,
-  MoreVertical,
   LucideIcon,
 } from "lucide-react";
 import FloatingAddButton from "../../../helper_Functions/FloatingAddButton";
